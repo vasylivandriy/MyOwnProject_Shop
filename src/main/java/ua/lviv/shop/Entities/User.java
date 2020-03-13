@@ -1,5 +1,7 @@
 package ua.lviv.shop.Entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class User {
@@ -10,6 +12,14 @@ public class User {
     private String email;
     private String role;
 
+
+    public User(int id, String firstName, String lastName, String email, String role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+    }
 
     public int getId() {
         return id;
@@ -78,4 +88,17 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, email, role);
     }
+
+
+    public static User getUser(ResultSet resultSet) throws SQLException {
+
+        int id = resultSet.getInt("id");
+        String firstName = resultSet.getString("firstName");
+        String lastName = resultSet.getString("lastName");
+        String email = resultSet.getString("email");
+        String role = resultSet.getString("role");
+
+       return new User(id,firstName,lastName, email,role);
+    }
+
 }
