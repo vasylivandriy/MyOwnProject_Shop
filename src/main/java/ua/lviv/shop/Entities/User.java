@@ -98,7 +98,6 @@ public class User {
         String email = resultSet.getString("email");
         String role = resultSet.getString("role");
 
-       return new User(id,firstName,lastName, email,role);
+        return new User(id, firstName, lastName, email, role);
     }
-
 }

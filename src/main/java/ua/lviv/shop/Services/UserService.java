@@ -22,11 +22,29 @@ public class UserService {
     }
 
 
-    User getById(int id){ return userDaoCRUD.getById(id);}
-    List<User> getAll(){return userDaoCRUD.getAll();}
-    void deleteById(int id){}
-    void deleteAll(){};
-    void update( User user){};
-    void insert(String firstName, String lastName, String email, String role){};
+    User getById(int id) {
+        User byId = userDaoCRUD.getById(id);
+
+        return userDaoCRUD.getById(id);
+    }
+
+    List<User> getAll() {
+        return userDaoCRUD.getAll();
+    }
+
+    void deleteById(int id) {
+    }
+
+    void deleteAll() {
+    }
+
+
+    void update(User user) {
+    }
+
+    void insert(String firstName, String lastName, String email, String role) {
+    }
+
 
 }
+

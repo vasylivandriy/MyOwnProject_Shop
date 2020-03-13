@@ -1,55 +1,53 @@
 package ua.lviv.shop.DAOs;
 
 import ua.lviv.shop.ConnectionManager;
-import ua.lviv.shop.Entities.User;
+import ua.lviv.shop.Entities.Product;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoCRUD implements CRUD<User> {
+public class ProductDaoCRUD implements CRUD<Product> {
 
     private Connection connection;
     private String SELECT_ALL = "SELECT * FROM project_shop.users";
-    private String SELECT_BY_ID = "SELECT * FROM project_shop.users where id = ?";
-    private String DELETE_BY_ID = "DELETE FROM project_shop.users where id = ?";
-    private String DELETE_ALL = "DELETE FROM project_shop.users";
+    private String SELECT_BY_ID = "SELECT * FROM project_shop.products where id = ?";
+    private String DELETE_BY_ID = "DELETE FROM project_shop.products where id = ?";
+    private String DELETE_ALL = "DELETE FROM project_shop.products";
     private String INSERT = "INSERT INTO project_shop.users (firstName, lastName, email, role) value (?,?,?,?)";
-    private String UPDATE_BY_ID = "UPDATE project_shop.users set firstName = ?, lastName = ?, email = ?, role = ? where id = ?";
+    private String UPDATE_BY_ID = "UPDATE project_shop.products set name =?, description = ?, price =? where id = ?";
 
 
-    public UserDaoCRUD() {
+    public ProductDaoCRUD() {
         this.connection = ConnectionManager.getConnection();
     }
 
 
     @Override
-    public User getById(int id) {
+    public Product getById(int id) {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
             preparedStatement.setObject(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            return User.getUser(resultSet);
+            return Product.getProduct(resultSet);
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error until getting user by id");
+            throw new RuntimeException("Error until getting product by id");
         }
 
     }
 
     @Override
-    public List<User> getAll() {
-
-
+    public List<Product> getAll() {
         try {
-            List<User> userList = new ArrayList<>();
+            List<Product> productList = new ArrayList<>();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
             while (resultSet.next()) {
-                userList.add(User.getUser(resultSet));
+                productList.add(Product.getProduct(resultSet));
             }
-            return userList;
+            return productList;
 
         } catch (SQLException e) {
             throw new RuntimeException("Error until getting all users");
@@ -67,10 +65,8 @@ public class UserDaoCRUD implements CRUD<User> {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("User was not deleted by id");
+            throw new RuntimeException("Product hasn't deleted by id");
         }
-
-
     }
 
     @Override
@@ -81,39 +77,38 @@ public class UserDaoCRUD implements CRUD<User> {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("All users was not deleted");
+            throw new RuntimeException("All products hasn't deleted");
         }
 
     }
 
     @Override
-    public void update(User user) {
+    public void update(Product product) {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID);
-            preparedStatement.setObject(1, user.getFirstName());
-            preparedStatement.setObject(2, user.getLastName());
-            preparedStatement.setObject(3, user.getEmail());
-            preparedStatement.setObject(4, user.getRole());
-            preparedStatement.setObject(5, user.getId());
+            preparedStatement.setObject(1, product.getName());
+            preparedStatement.setObject(2, product.getDescription());
+            preparedStatement.setObject(3, product.getPrice());
+            preparedStatement.setObject(4, product.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("User was not updated by id");
+            throw new RuntimeException("Product hasn't updated by id");
         }
 
     }
 
 
-    public void insert(String firstName, String lastName, String email, String role) {
+    public void insert(String name, String description, float price) {
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.setObject(1, firstName);
-            preparedStatement.setObject(2, lastName);
-            preparedStatement.setObject(3, email);
-            preparedStatement.setObject(4, role);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, description);
+            preparedStatement.setFloat(3, price);
 
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -121,8 +116,9 @@ public class UserDaoCRUD implements CRUD<User> {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("User was not inserted");
+            throw new RuntimeException("Product hasn't inserted");
         }
+
 
     }
 }
