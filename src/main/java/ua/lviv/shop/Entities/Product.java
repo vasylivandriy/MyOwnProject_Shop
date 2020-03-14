@@ -62,7 +62,7 @@ public class Product {
             Integer product_id = resultSet.getInt("id");
             String name = resultSet.getString("name");
             String description = resultSet.getString("description");
-            float price = resultSet.getFloat("price");
+            Float price = resultSet.getFloat("price");
 
             return new Product(product_id, name, description, price);
         } catch (SQLException e) {

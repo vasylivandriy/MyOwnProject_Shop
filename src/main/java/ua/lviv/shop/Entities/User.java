@@ -6,14 +6,13 @@ import java.util.Objects;
 
 public class User {
 
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
     private String role;
 
-
-    public User(int id, String firstName, String lastName, String email, String role) {
+    public User(Integer id, String firstName, String lastName, String email, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -21,11 +20,18 @@ public class User {
         this.role = role;
     }
 
-    public int getId() {
+    public User(String firstName, String lastName, String email, String role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -77,7 +83,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id &&
+        return Objects.equals(id, user.id) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(email, user.email) &&
@@ -89,10 +95,9 @@ public class User {
         return Objects.hash(id, firstName, lastName, email, role);
     }
 
-
     public static User getUser(ResultSet resultSet) throws SQLException {
 
-        int id = resultSet.getInt("id");
+        Integer id = resultSet.getInt("id");
         String firstName = resultSet.getString("firstName");
         String lastName = resultSet.getString("lastName");
         String email = resultSet.getString("email");
