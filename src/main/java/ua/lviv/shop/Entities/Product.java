@@ -2,26 +2,33 @@ package ua.lviv.shop.Entities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class Product {
 
-    private int id;
+    private Integer id;
     private String name;
     private String description;
-    private float price;
+    private Float price;
 
-    public Product(int id, String name, String description, float price) {
+    public Product(Integer id, String name, String description, Float price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
     }
 
-    public int getId() {
+    public Product(String name, String description, Float price) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -41,13 +48,29 @@ public class Product {
         this.description = description;
     }
 
-    public float getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
+
+    public static Product getProduct(ResultSet resultSet)  {
+
+        try {
+            Integer product_id = resultSet.getInt("id");
+            String name = resultSet.getString("name");
+            String description = resultSet.getString("description");
+            float price = resultSet.getFloat("price");
+
+            return new Product(product_id, name, description, price);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error while getting a product");
+        }
+    }
+
 
     @Override
     public String toString() {
@@ -59,14 +82,19 @@ public class Product {
                 '}';
     }
 
-    public static Product getProduct(ResultSet resultSet) throws SQLException {
-
-        int id = resultSet.getInt("id");
-        String name = resultSet.getString("name");
-        String description = resultSet.getString("description");
-        float price = resultSet.getFloat("price");
-
-        return new Product(id, name, description, price);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(description, product.description) &&
+                Objects.equals(price, product.price);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, price);
+    }
 }

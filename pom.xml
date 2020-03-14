@@ -8,8 +8,8 @@
   <artifactId>MyOwnProject_Shop</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+
   <name>MyOwnProject_Shop</name>
-  <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
   <properties>

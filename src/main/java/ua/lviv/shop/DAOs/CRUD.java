@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface CRUD<T> {
 
-    T getById(int id);
+    T getById(Integer id);
 
     List<T> getAll();
 
-    void deleteById(int id);
+    void deleteById(Integer id);
 
     void deleteAll();
 

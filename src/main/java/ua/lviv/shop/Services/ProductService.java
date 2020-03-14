@@ -23,25 +23,30 @@ public class ProductService {
     }
 
 
-    public static Product getById(int id) {
-        return productService.getById(id);
+    public Product getById(int id) {
+        return productDaoCRUD.getById(id);
     }
 
     List<Product> getAll() {
-        return productService.getAll();
+        return productDaoCRUD.getAll();
     }
 
-    void deleteById(int id) {
+    void deleteById(Integer id) {
+        productDaoCRUD.deleteById(id);
     }
 
     void deleteAll() {
+        productDaoCRUD.deleteAll();
     }
 
     void update(Product product) {
+
+        productDaoCRUD.update(product);
     }
 
 
     void insert(String name, String description, float price) {
+        productDaoCRUD.insert(name, description, price);
     }
 
 }

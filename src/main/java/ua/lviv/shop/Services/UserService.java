@@ -21,9 +21,7 @@ public class UserService {
         return userService;
     }
 
-
     User getById(int id) {
-        User byId = userDaoCRUD.getById(id);
 
         return userDaoCRUD.getById(id);
     }
@@ -32,17 +30,24 @@ public class UserService {
         return userDaoCRUD.getAll();
     }
 
-    void deleteById(int id) {
+    void deleteById(Integer id) {
+        userDaoCRUD.deleteById(id);
     }
 
     void deleteAll() {
+        userDaoCRUD.deleteAll();
     }
 
 
     void update(User user) {
+
+        userDaoCRUD.update(user);
     }
 
+
     void insert(String firstName, String lastName, String email, String role) {
+
+        userDaoCRUD.insert(firstName, lastName, email, role);
     }
 
 

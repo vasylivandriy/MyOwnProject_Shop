@@ -2,6 +2,7 @@ package ua.lviv.shop.DAOs;
 
 import ua.lviv.shop.ConnectionManager;
 import ua.lviv.shop.Entities.Product;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +10,13 @@ import java.util.List;
 public class ProductDaoCRUD implements CRUD<Product> {
 
     private Connection connection;
+    private PreparedStatement preparedStatement;
     private String SELECT_ALL = "SELECT * FROM project_shop.users";
     private String SELECT_BY_ID = "SELECT * FROM project_shop.products where id = ?";
     private String DELETE_BY_ID = "DELETE FROM project_shop.products where id = ?";
     private String DELETE_ALL = "DELETE FROM project_shop.products";
-    private String INSERT = "INSERT INTO project_shop.users (firstName, lastName, email, role) value (?,?,?,?)";
-    private String UPDATE_BY_ID = "UPDATE project_shop.products set name =?, description = ?, price =? where id = ?";
+    private String CREATE = "INSERT INTO project_shop.users (firstName, lastName, email, role) value (?,?,?,?)";
+    private String CHANGE_BY_ID = "UPDATE project_shop.products set name =?, description = ?, price =? where id = ?";
 
 
     public ProductDaoCRUD() {
@@ -23,10 +25,10 @@ public class ProductDaoCRUD implements CRUD<Product> {
 
 
     @Override
-    public Product getById(int id) {
+    public Product getById(Integer id) {
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
+            preparedStatement = connection.prepareStatement(SELECT_BY_ID);
             preparedStatement.setObject(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -56,10 +58,10 @@ public class ProductDaoCRUD implements CRUD<Product> {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
+            preparedStatement = connection.prepareStatement(DELETE_BY_ID);
             preparedStatement.setObject(1, id);
             preparedStatement.executeUpdate();
 
@@ -73,7 +75,7 @@ public class ProductDaoCRUD implements CRUD<Product> {
     public void deleteAll() {
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALL);
+            preparedStatement = connection.prepareStatement(DELETE_ALL);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,29 +84,10 @@ public class ProductDaoCRUD implements CRUD<Product> {
 
     }
 
-    @Override
-    public void update(Product product) {
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BY_ID);
-            preparedStatement.setObject(1, product.getName());
-            preparedStatement.setObject(2, product.getDescription());
-            preparedStatement.setObject(3, product.getPrice());
-            preparedStatement.setObject(4, product.getId());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Product hasn't updated by id");
-        }
-
-    }
-
-
     public void insert(String name, String description, float price) {
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, description);
@@ -119,6 +102,25 @@ public class ProductDaoCRUD implements CRUD<Product> {
             throw new RuntimeException("Product hasn't inserted");
         }
 
-
     }
+
+
+        @Override
+    public void update(Product product) {
+
+        try {
+            preparedStatement = connection.prepareStatement(CHANGE_BY_ID);
+            preparedStatement.setObject(1, product.getName());
+            preparedStatement.setObject(2, product.getDescription());
+            preparedStatement.setObject(3, product.getPrice());
+            preparedStatement.setObject(4, product.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Product hasn't updated by id");
+        }
+
+}
+
 }
